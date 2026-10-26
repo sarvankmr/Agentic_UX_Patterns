@@ -1714,7 +1714,7 @@ function traceHTML(t, panel) {
   const head = t.running
     ? `<span class="sdl-spinner sdl-spinner--sm"></span><span class="sdl-sbold">${esc(t.title)}</span><span class="sdl-meta">${t.items.length} steps · running</span>`
     : `${ic(t.endState === "failed" ? "error" : t.endState === "warning" ? "warning" : "ai", t.endState === "completed" ? "sdl-icon--accent" : "")}<span class="sdl-sbold">${esc(t.title)}</span><span class="sdl-meta">${t.meta}</span>`;
-  const snapBtn = panel ? "" : `<button class="sdl-icon-btn" data-snap-trace title="Snap trace to side panel" aria-label="Snap trace to side panel">${ic("dockRight")}</button>`;
+  const snapBtn = "";
   return `<div class="trace-wrap${t.collapsed ? " is-collapsed" : ""}" data-trace="${t.id}"><div class="sdl-trace sdl-trace--${panel ? "panel" : "inline"}">
     <div class="sdl-trace__summary" data-toggle-trace="${t.id}">${head}<span class="grow"></span>${snapBtn}${ic(t.collapsed ? "chevDown" : "chevUp", "sdl-icon--sm sdl-chev")}</div>
     <div class="trace-items">${items.map(i => itemHTML(t, i, panel)).join("") || `<div class="sdl-caption" style="padding:4px 0 8px">No steps match this filter.</div>`}</div></div></div>`;
@@ -2322,13 +2322,12 @@ function renderGuide() {
       <div><h5>Where things live</h5><div class="ov-surf">
         <div><b>${ic("ai")} Copilot</b>The conversation. The activity trace sits inline in each AI message, and approval blocks sit above the input and lock it until you decide.</div>
         <div><b>${ic("cog")} Agent Configuration Center</b>Its own main navigation item: the agent collection and the agent details panel for delegation, access tiers, memory, persona and the role contract.</div>
-        <div><b>${ic("history")} Activity trace</b>Inline by default. Snap it out to a side panel for the full, filterable audit timeline.</div></div></div>
+        <div><b>${ic("history")} Activity trace</b>Inline in each AI message by default. Pattern 5.4 opens it as a side panel with the full, filterable audit timeline.</div></div></div>
       <div><h5>Snapping panels</h5><div class="snap-legend">
         ${ic("grip")}<span>Drag a panel header to the left, right or top snap zone</span>
         ${ic("dockLeft")}<span>Snap to the left or right side</span>
         ${ic("maximize")}<span>Expand over the workspace (and restore)</span>
-        ${ic("collapse")}<span>Collapse to an edge tab, then click the tab to reopen</span>
-        ${ic("dockRight")}<span>On a trace: snap it out of the message into the side panel</span></div></div>
+        ${ic("collapse")}<span>Collapse to an edge tab, then click the tab to reopen</span></div></div>
       <div class="guide-play"><button class="sdl-btn" data-start>Start with the first pattern</button><button class="sdl-btn sdl-btn--outline-secondary" data-gt="map">Open pattern map</button></div>`;
   }
   if (S.guideTab === "map") {
