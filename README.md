@@ -14,3 +14,7 @@ A single-file HTML deck (`index.html`, Siemens Sans Pro embedded, no build step)
 ## Interactive pattern demo
 
 `agentic-ux-demo.html` (served at `/agentic-ux-demo`) is a standalone Travel Copilot built on the Siemens Design Language AI UX components, demonstrating 16 Agentic UX patterns with the Agent Configuration Center and snappable pattern guide, activity trace and agent details panels. Open a pattern directly with `/agentic-ux-demo#3.2` (pattern number as the hash).
+
+## Travel Copilot demo (guidelines and patterns)
+
+`travel-copilot.html` (served at `/travel-copilot`) is the business-trip Travel Copilot demo: the eight Human-Agent Interaction guidelines grouped See, Steer and Protect, each with a GSAP guided spotlight tour, plus a Test tab that opens a short tour for each Agentic UX pattern. Built on the Siemens Design Language AI UX components.
