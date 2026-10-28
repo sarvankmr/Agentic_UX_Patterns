@@ -1402,6 +1402,7 @@ body.has-tour .pn{display:none!important}
 .sdl-ai-msg__body p .pn{vertical-align:middle;margin-block:-4px;margin-inline:2px}
 .sdl-source-pill .sdl-icon{flex:none}
 .pm-item.is-off{opacity:.45;cursor:default}
+.guide .sdl-tabs{width:100%}.guide .sdl-tab{flex:1 1 auto;min-width:0;padding-inline:var(--spacing-30);justify-content:center}
 /* Application header: 48px on background-2, logo in text-primary, no bottom line */
 .sdl-app-header{border-bottom:0;box-shadow:none}
 .sdl-ai-msg__attr.is-toggle{cursor:pointer;min-height:36px;border-radius:var(--radius-xs);gap:var(--spacing-30)}
@@ -1439,6 +1440,15 @@ body.no-notes .pn:not(.pn--legend){display:none}
 .scope-wrap{display:flex;align-items:center;gap:var(--spacing-40);flex-wrap:wrap}
 .scope-chips{display:flex;gap:var(--spacing-30);flex-wrap:wrap}
 .tier-row{display:flex;gap:var(--spacing-30);flex-wrap:wrap;margin:var(--spacing-30) 0}
+.prin{display:flex;flex-direction:column}
+.prin__item{border-top:var(--border-width-default) solid var(--border-4)}.prin__item:last-child{border-bottom:var(--border-width-default) solid var(--border-4)}
+.prin__item summary{cursor:pointer;display:flex;flex-direction:column;gap:2px;padding:var(--spacing-40) 0;font-size:.875rem;line-height:1.4285714286;list-style:none}
+.prin__item summary::-webkit-details-marker{display:none}.prin__item summary b{font-weight:600}.prin__item summary span{color:var(--text-secondary)}
+.prin__body{display:flex;flex-direction:column;gap:var(--spacing-40);padding-bottom:var(--spacing-50);font-size:.875rem;line-height:1.4285714286}
+.prin__body p{margin:0}.prin__promise{color:var(--text-primary)}
+.prin__list{margin:0;padding-left:var(--spacing-50);display:flex;flex-direction:column;gap:var(--spacing-30)}.prin__list b{font-weight:600}
+.prin__check{background:var(--bg-ui-2,transparent);border-left:3px solid var(--border-accent);padding-left:var(--spacing-40)}.prin__check b{display:block;font-weight:600}
+.prin__art{font-size:.75rem;color:var(--text-secondary)}
 .intent{margin:0;display:flex;flex-direction:column}
 .intent__row{display:grid;grid-template-columns:5.5rem 1fr;gap:var(--spacing-40);padding:var(--spacing-40) 0;border-top:var(--border-width-default) solid var(--border-4);font-size:.875rem;line-height:1.4285714286}
 .intent__row:last-child{border-bottom:var(--border-width-default) solid var(--border-4)}
@@ -1472,7 +1482,7 @@ body.no-notes .pn:not(.pn--legend){display:none}
     <span class="sdl-app-header__title">Travel Copilot</span>
     <span class="hdr-crumb" id="hdr-crumb">Agentic UX pattern demo</span>
     <span class="sdl-app-header__spacer"></span>
-    <span class="sdl-app-header__tools"><button class="sdl-icon-btn" id="hdr-notes" aria-label="Hide pattern notes" aria-pressed="true" title="Hide pattern notes"></button><button class="sdl-icon-btn" id="hdr-guide" aria-label="Demo guide" title="Demo guide"></button>
+    <span class="sdl-app-header__tools">
     <span class="sdl-avatar-init" title="Jennie">J</span></span>
   </header>
 
@@ -1787,7 +1797,7 @@ function layoutPanels() {
   });
   docks.left.style.setProperty("--dock-w", (widths.left || 360) + "px");
   docks.right.style.setProperty("--dock-w", (widths.right || 400) + "px");
-  $("#hdr-guide").classList.toggle("is-selected", PANELS.guide.state === "open");
+  
 }
 /* drag-to-snap */
 function initDrag(p, id) {
@@ -1962,8 +1972,7 @@ window.addEventListener("scroll", closePn, true);
 window.addEventListener("resize", closePn);
 function setNotes(on) {
   S.notes = on; document.body.classList.toggle("no-notes", !on); closePn();
-  const b = $("#hdr-notes"); b.classList.toggle("is-selected", on); b.setAttribute("aria-pressed", on);
-  b.title = b.ariaLabel = on ? "Hide pattern notes" : "Show pattern notes";
+  const b = $("#hdr-notes"); if (b) { b.classList.toggle("is-selected", on); b.setAttribute("aria-pressed", on); b.title = b.ariaLabel = on ? "Hide pattern notes" : "Show pattern notes"; }
   const sw = $("#notes-sw"); if (sw) { sw.setAttribute("aria-checked", on); sw.querySelector(".sdl-toggle__track").classList.toggle("is-on", on); }
 }
 
@@ -2323,7 +2332,7 @@ function welcome() {
     ["Summarize my travel spend this quarter", "Spend", "Reads expense data."],
     ["Explain what a refundable fare means", "Top picks", "Uses no personal data."]];
   w.innerHTML = `<div class="sdl-welcome__head"><svg class="sdl-key-visual sdl-key-visual--dark" viewBox="0 0 75 75" aria-hidden="true">${IC.__kv}</svg>
-    <div><h1 class="sdl-welcome__greeting"><b>Hello, Jennie.</b><span>How can I help you today?</span></h1><p class="sdl-welcome__sub" style="margin-top:var(--spacing-30)">Choose a suggested prompt below or type your own to begin. ${pn("wayfinders")}</p></div></div>
+    <div><h1 class="sdl-welcome__greeting"><b>Hello, Jennie.</b><span>How can I help you today?</span></h1><p class="sdl-welcome__sub" style="margin-top:var(--spacing-30)">Choose a suggested prompt below or type your own to begin.</p></div></div>
     <div class="sdl-welcome__chips" role="group" aria-label="Prompt categories">${["All prompts", "Top picks", "Trips", "Spend"].map((c, i) => `<button class="sdl-filter-chip sdl-filter-chip--neutral${i === 0 ? " is-selected" : ""}" aria-pressed="${i === 0}" data-wcat="${c}">${c}</button>`).join("")}</div>
     <div class="sdl-prompt-cards">${CARDS.map(([t, c, tip]) => `<button class="sdl-prompt-card" data-wf="${esc(t)}" data-cat="${c}" title="${esc(tip)}">${esc(t)}</button>`).join("")}</div>
     <div class="sdl-welcome__actions"><button class="sdl-btn sdl-btn--invisible-secondary" data-wrefresh>${ic("refresh")} Refresh prompts</button></div>`;
@@ -2760,17 +2769,41 @@ const INTENT = [
   ["Harness", "The Travel agent reads and proposes. A person approves every booking. Every step is traced."],
   ["Loop", "Plan, check, propose, approve, book. Feedback and corrections go back into memory."]
 ];
+const PRINCIPLES = [
+  { k: "Transparent", t: "Be open about the AI.", p: "The user knows when AI is involved, what it can do, and where its answer comes from.",
+    b: [["Say it is AI", "Mark AI at first contact and keep a visible marker while the user works with it."], ["Mark what AI created or changed", "Content, values and settings the AI created or edited are marked as such."], ["Show what it can and cannot do", "Say what the AI is built for here and where it is not reliable."], ["Show the sources", "Let the user see the data, documents or inputs an answer is based on."]],
+    q: "Does the user know this is AI, and what it is good at?", a: "Art. 13, 14(4)(a), 50" },
+  { k: "Explainable", t: "Explain at the right level of detail.", p: "The user understands why the AI suggests something, in words they know, with as much detail as the decision needs.",
+    b: [["Explain in the user's language", "Use the words of the user's work, not model internals."], ["Start with the main reason", "Show it next to the result and let the user open supporting data. Keep checkable evidence apart from AI-generated text."], ["Match detail to role and risk", "The higher the risk, the more explanation is shown by default."], ["Show confidence as meaning", "Only with a validated measure, in words people can act on, such as \"Low confidence, check before you act.\""]],
+    q: "Can this user understand why the AI made this suggestion, at the level of detail this moment needs?", a: "Art. 13(1), 14(4)(c), 15(3)" },
+  { k: "Controllable", t: "Keep the user in appropriate control.", p: "The user has as much control as the situation requires, and can reject, take over, or stop the AI.",
+    b: [["Know the control mode", "In the loop, on the loop or out of the loop. The product owner chooses it with safety engineering."], ["Show the active mode", "Show what the AI will do on its own and when, so the user can step in first."], ["Always allow override and stop", "Easy to find in every state, with no penalty for using it."], ["Do not preselect a suggestion", "Consequential suggestions are chosen explicitly, which counters automation bias."], ["Keep controls the same in every mode", "Override and stop work the same as autonomy grows."]],
+    q: "Can the user reject, take over, or stop the AI in every state where safety engineering allows it, and is the control easy to find?", a: "Art. 14(1), 14(3), 14(4)(b), (d), (e)" },
+  { k: "Error handling", t: "Plan for when the AI fails.", p: "When the AI is wrong, unsure, slow or unavailable, the user can continue.",
+    b: [["Show errors honestly", "Never show success when the task failed."], ["Ask when unsure", "Flag low confidence and present the action as a suggestion to confirm."], ["Offer a way back", "Show what changed and offer one-step undo. Warn before anything that cannot be reversed."], ["Show the state after a stop", "Say what is still running and what to do next. Do not show the AI as active until the restart rule is met."], ["Keep the product usable without the AI", "Design the screens for when the AI is unavailable."], ["Learn from corrections", "Offer a short, optional reason when the user undoes or overrides."]],
+    q: "What does this screen look like when the AI fails?", a: "Art. 14(4)(a), (d), (e), 15(4)" },
+  { k: "Accountable", t: "Keep a readable record.", p: "Authorized people can see later what the AI did, why it did it, and who was responsible.",
+    b: [["Record every step", "Decisions, actions and inputs, and whether the user or the AI performed each. No more than needed."], ["Make the record readable", "A view that authorized users and auditors can filter, not only a log file."], ["Keep it as long as the user can act on it", "Visible at least as long as an action can be undone or an incident is under review."], ["Show who did what", "Who initiated, approved or executed each action, as the system recorded it."]],
+    q: "Can someone see later what happened, and why?", a: "Art. 12, 19, 26(5), 26(6)" }
+];
 S.gtab = S.gtab || "intent";
 function renderGuide() {
   const B = PANELS.guide.body, t = S.gtab;
   let h = `<div class="guide max-wide"><div class="sdl-tabs" role="tablist" aria-label="Demo guide">
+    <button class="sdl-tab${t === "principles" ? " is-selected" : ""}" role="tab" aria-selected="${t === "principles"}" data-gtab="principles">Principles</button>
     <button class="sdl-tab${t === "intent" ? " is-selected" : ""}" role="tab" aria-selected="${t === "intent"}" data-gtab="intent">Intent</button>
     <button class="sdl-tab${t === "guidelines" ? " is-selected" : ""}" role="tab" aria-selected="${t === "guidelines"}" data-gtab="guidelines">Guidelines</button>
     <button class="sdl-tab${t === "test" ? " is-selected" : ""}" role="tab" aria-selected="${t === "test"}" data-gtab="test">Test</button></div><div class="guide__sec" role="tabpanel">`;
-  if (t === "intent") {
+  if (t === "principles") {
+    h += `<div><h2>AI UX guidelines and principles</h2><p class="lead" style="margin-top:8px">Five principles frame how a person and an AI agent work together. Each one is a promise, the behaviours that keep it, and a question to check your design.</p>
+      <p class="lead" style="margin-top:8px"><a class="sdl-link" href="https://design-language.siemens.io/core-assets/ai-guidelines" target="_blank" rel="noopener">AI guidelines in the Siemens Design Language</a></p></div>
+      <div class="prin">${PRINCIPLES.map((x, i) => `<details class="prin__item"${i === 0 ? " open" : ""}><summary><b>${esc(x.k)}</b><span>${esc(x.t)}</span></summary>
+        <div class="prin__body"><p class="prin__promise">${esc(x.p)}</p><ul class="prin__list">${x.b.map(([a, b]) => `<li><b>${esc(a)}.</b> ${esc(b)}</li>`).join("")}</ul>
+        <p class="prin__check"><b>Check your design</b>${esc(x.q)}</p><p class="prin__art">Related EU AI Act articles: ${esc(x.a)}</p></div></details>`).join("")}</div>
+      <p class="sdl-muted" style="font-size:.75rem">Source: AI UX Design Principles v1.0, FT UX, October 2026. Design guidance, not legal advice.</p>`;
+  } else if (t === "intent") {
     h += `<div><h2>Intent frame</h2><p class="lead" style="margin-top:8px">An agent works well when five things are clear. Here they are for one business trip.</p></div>
-      <dl class="intent">${INTENT.map(([k, v]) => `<div class="intent__row"><dt>${k}</dt><dd>${esc(v)}</dd></div>`).join("")}</dl>
-      <button class="sdl-btn sdl-btn--outline-primary" data-gtab="guidelines" style="align-self:flex-end">Choose a guideline</button>`;
+      <dl class="intent">${INTENT.map(([k, v]) => `<div class="intent__row"><dt>${k}</dt><dd>${esc(v)}</dd></div>`).join("")}</dl>`;
   } else if (t === "test") {
     h += `<div><h2>Agentic UX patterns</h2><p class="lead" style="margin-top:8px">Pick a pattern. A short tour shows where it appears in the demo. Greyed patterns have no place in this demo.</p></div>`;
     KCH.forEach(c => {
@@ -3000,10 +3033,6 @@ document.addEventListener("keydown", e => {
    ============================================================ */
 hydrateIcons();
 renderAgentChip();
-$("#hdr-guide").innerHTML = ic("about");
-$("#hdr-notes").innerHTML = ic("bulb");
-$("#hdr-guide").addEventListener("click", toggleGuide);
-$("#hdr-notes").addEventListener("click", () => setNotes(!S.notes));
 ["guide", "trace", "details"].forEach(id => buildPanel(id));
 PANELS.guide.body.addEventListener("click", guideClick);
 $(".acc__head h1").insertAdjacentHTML("beforeend", " " + pn("registry"));
